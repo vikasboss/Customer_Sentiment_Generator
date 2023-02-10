@@ -108,3 +108,13 @@ curl --location --request POST 'http://127.0.0.1:5000/api/transcription' \
 --form 'callsid="247d53f9875d891032b7865370e4172a"' \
 --form 'callbackurl="https://webhook.site/127d4c42-51b1-45c8-9f71-5ad4c62332f1"' \
 --form 'binary_file=@"/home/exoit/Downloads/247d53f9875d891032b7865370e4172a.mp3"'
+
+
+
+
+ALTER TABLE CallDB ADD COLUMN createdAt timestamp DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE CallDB ADD COLUMN updatedAt timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+
+
+curl --location --request GET 'http://127.0.0.1:6000/calls/sentiment_range?sentimentRange=7-8'

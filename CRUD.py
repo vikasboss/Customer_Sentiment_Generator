@@ -114,6 +114,25 @@ def read_call(callSid):
     return message
 
 
+@app.route('/calls/sentiment_range', methods=['GET'])
+def get_calls_by_sentiment_range():
+    sentiment_range = request.args.get('sentimentRange')
+    sentiment_min, sentiment_max = map(int, sentiment_range.split("-"))
+    
+    conn = connect_to_database()
+    cursor = conn.cursor()
+
+    sql = "SELECT callSid,sentiment FROM CallDB WHERE sentiment BETWEEN %s AND %s"
+    values = (sentiment_min, sentiment_max)
+
+    cursor.execute(sql, values)
+    result = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+
+    return str(result), 200
+
 def convert_to_int(string):
     try:
         return int(string)
