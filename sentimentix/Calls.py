@@ -1,7 +1,10 @@
 from flask import Flask, request
+from flask import Response
 import openai
 import mysql.connector
 import requests
+import uuid
+import json
 # Apply for an API key from OpenAI to use their GPT-3 model
 openai.api_key = "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"
 app = Flask(__name__)
@@ -58,7 +61,7 @@ def read_call(callSid):
     )
 
     # Get the first completion
-    message = completions.choices[0].text
+    message = completions.choices[0].text.replace("\n", "")
     summaryText = message
 
     # Print the summary
@@ -140,7 +143,8 @@ def get_calls_by_sentiment_range():
     cursor.close()
     conn.close()
 
-    return str(result), 200
+    response = { "request_id": uuid.uuid4().hex, "method": "GET", "http_code": 200, "response": result }
+    return Response(json.dumps(response), status=200, mimetype='application/json') 
 
 def convert_to_int(string):
     try:
