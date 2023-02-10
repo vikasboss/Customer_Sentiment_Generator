@@ -79,6 +79,17 @@ CREATE TABLE CallDB(
 
 insert into CallDB (callSid, transcription)VALUES('c77324568df162aff6f436ef23de172a',"Hello? Hello? Yeah, is it Mr. Ravindra? Yes. Hi, Ravindra. Nishad, this is Nisha from ExaTel. We are actually requested for callback. Are you looking for any cloud telephone? Like they have spoken to our team, right, regarding dialer service. Yeah, our company is looking for a dialer solution. Yeah. The requirement is that we want to output our customers regarding their queries, complaints, or a feedback. Okay, okay, okay. So do you have a CRM at your end? Yeah, we are using Threads, folks, as in Threads is associated. Okay, got it. So it's going to be manual outgoing calls, right? It can be predictive, it can be manual. We are looking for a solution to provide both. Okay, got it. Okay, got it, got it. How many users you will have who will answer the handle calls? Initially we'll start with 50, 60 agents, but later on we'll improve it to 100, maybe 200. 60? 60 to 100, initially we'll start with 60 to 100, and then we'll increase the count by 100 or 150. Okay. Is your company registered? Yeah, it's Paytm Women's Bank. You will be able to provide us the documents, right, the company PAN card and card registration? I am from the business team, but the purchasing will provide you the share. Okay, got it. If you can share your details, what kind of services you have so that they can evaluate, and then accordingly they'll proceed. Got it, got it. Can you just share me your email ID? My email ID is ravindar4.sangh. One second, ravindar4.sangh. One second, one second, ravindar4.sangh. At the rate, Paytm Bank..sangh, at the rate? Paytmbank.com. Paytmbank.com, okay. Thank you. I'll just share the details. All right, of course. Thank you.");
 
+
+
+ALTER TABLE CallDB
+MODIFY callSid VARCHAR(10) NOT NULL,
+ADD PRIMARY KEY (callSid);
+
+
+
+
+
+
 3>DB SIDE check
 
 4>Create webserver
@@ -86,3 +97,14 @@ insert into CallDB (callSid, transcription)VALUES('c77324568df162aff6f436ef23de1
 5>summarise the texts
 6>sentiment analysis
 7>We will send post request to that url 
+
+
+
+Sample curl Requests:
+curl --location --request GET 'http://127.0.0.1:6000/call/c77324568df162aff6f436ef23de172a'
+
+
+curl --location --request POST 'http://127.0.0.1:5000/api/transcription' \
+--form 'callsid="247d53f9875d891032b7865370e4172a"' \
+--form 'callbackurl="https://webhook.site/127d4c42-51b1-45c8-9f71-5ad4c62332f1"' \
+--form 'binary_file=@"/home/exoit/Downloads/247d53f9875d891032b7865370e4172a.mp3"'

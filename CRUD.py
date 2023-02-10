@@ -80,7 +80,7 @@ def read_call(callSid):
 
     # Get the first completion
     message = completions.choices[0].text
-    sentiment = message
+    sentiment = convert_to_int(message)
 
     # Print the sentiment analysis score
     print(message)
@@ -113,6 +113,18 @@ def read_call(callSid):
         message = "Hit sending failed"
     return message
 
+
+def convert_to_int(string):
+    try:
+        return int(string)
+    except ValueError:
+        return_value = 0
+        for character in string:
+            try:
+                return_value = return_value * 10 + int(character)
+            except ValueError:
+                pass
+        return return_value
 
 #    return str(result), 200
 
