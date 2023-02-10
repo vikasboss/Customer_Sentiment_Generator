@@ -1,0 +1,88 @@
+1. Set of audio required (clean)
+2. API using the openAI model speech to text(free to use) cost 0
+3. API to summarise
+4. API to give sentiment and coversion score
+
+
+
+Voice Service:
+    Apporoach 1 calls the API api/transcription
+    Apporoach 2 event to kafka, 
+
+Transcription Service:
+    Flask API POST api/transcription :-
+        1. Receive AUDIO binary, s3 url, callsid, callbackurl input via API, revert the status 202, {requestID, callsid}
+        2. Write the transcription to mysql DB (Worker)
+    
+Sentiment & summarise service:
+    Flask API:-
+        1. Receive `callback` event from transcription Service {requestID, callsid}
+        2. Read the transcription to mysql DB
+        3. summarise the transcription
+        4. sentiment analysis on the transcription
+        5. Write to the DB summary and sentiment analysis
+
+
+End User, Call sid detail API:
+
+    fields: 
+        transciption, summary, sentiment
+            Processing / Result
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Sentiment & summarise service:
+    Flask API:-
+        1. Receive `callback` event from transcription Service {requestID, callsid}
+        2. Read the transcription to mysql DB
+        3. summarise the transcription
+        4. sentiment analysis on the transcription
+        5. Write to the DB summary and sentiment analysis
+
+
+
+
+
+
+
+
+CREATE USER 'vikas'@'localhost' IDENTIFIED BY 'Vikas@12345';
+
+GRANT ALL PRIVILEGES ON *.* TO 'vikas'@'localhost';
+ALTER USER 'vikas'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Vikas@12345';
+
+
+1>MYSQL SETUP
+2>Insertion and table creation
+Call ->table
+callsid,transcription,summmarytext,sentiment
+CREATE TABLE CallDB(
+    callSid TEXT,
+    transcription TEXT,
+    summaryText TEXT,
+    sentiment INT
+);
+
+insert into CallDB (callSid, transcription)VALUES('c77324568df162aff6f436ef23de172a',"Hello? Hello? Yeah, is it Mr. Ravindra? Yes. Hi, Ravindra. Nishad, this is Nisha from ExaTel. We are actually requested for callback. Are you looking for any cloud telephone? Like they have spoken to our team, right, regarding dialer service. Yeah, our company is looking for a dialer solution. Yeah. The requirement is that we want to output our customers regarding their queries, complaints, or a feedback. Okay, okay, okay. So do you have a CRM at your end? Yeah, we are using Threads, folks, as in Threads is associated. Okay, got it. So it's going to be manual outgoing calls, right? It can be predictive, it can be manual. We are looking for a solution to provide both. Okay, got it. Okay, got it, got it. How many users you will have who will answer the handle calls? Initially we'll start with 50, 60 agents, but later on we'll improve it to 100, maybe 200. 60? 60 to 100, initially we'll start with 60 to 100, and then we'll increase the count by 100 or 150. Okay. Is your company registered? Yeah, it's Paytm Women's Bank. You will be able to provide us the documents, right, the company PAN card and card registration? I am from the business team, but the purchasing will provide you the share. Okay, got it. If you can share your details, what kind of services you have so that they can evaluate, and then accordingly they'll proceed. Got it, got it. Can you just share me your email ID? My email ID is ravindar4.sangh. One second, ravindar4.sangh. One second, one second, ravindar4.sangh. At the rate, Paytm Bank..sangh, at the rate? Paytmbank.com. Paytmbank.com, okay. Thank you. I'll just share the details. All right, of course. Thank you.");
+
+3>DB SIDE check
+
+4>Create webserver
+4>serrach that callsid in DB
+5>summarise the texts
+6>sentiment analysis
+7>We will send post request to that url 
