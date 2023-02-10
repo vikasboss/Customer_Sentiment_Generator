@@ -16,6 +16,7 @@ class MySqlHandler:
                                                         )
 
             # Get connection object from a pool
+            print("self.connection_object", connection_pool)
             self.connection_object = connection_pool.get_connection()
 
             if self.connection_object.is_connected():
