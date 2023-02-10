@@ -119,11 +119,20 @@ def get_calls_by_sentiment_range():
     sentiment_range = request.args.get('sentimentRange')
     sentiment_min, sentiment_max = map(int, sentiment_range.split("-"))
     
+    created_at_range = request.args.get('createdAtRange')
+    if created_at_range:
+        created_at_min, created_at_max = map(str, created_at_range.split(" "))
+        created_at_min = created_at_min.strip() + " 00:00:00"
+        created_at_max = created_at_max.strip() + " 23:59:59"
+    else:
+        created_at_min = "0000-00-00 00:00:00"
+        created_at_max = "9999-12-31 23:59:59"
+    
     conn = connect_to_database()
     cursor = conn.cursor()
 
-    sql = "SELECT callSid,sentiment FROM CallDB WHERE sentiment BETWEEN %s AND %s"
-    values = (sentiment_min, sentiment_max)
+    sql = "SELECT callSid,sentiment FROM CallDB WHERE sentiment BETWEEN %s AND %s AND createdAt BETWEEN %s AND %s"
+    values = (sentiment_min, sentiment_max, created_at_min, created_at_max)
 
     cursor.execute(sql, values)
     result = cursor.fetchall()
